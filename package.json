@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@supabase/supabase-js": "^2.56.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -14,6 +13,8 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "mongoose": "^8.18.0",
     "multer": "^2.0.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -23,6 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "seed": "cd server && node seed.js",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "client": "react-scripts start",
     "server": "cd server && node server.js",
