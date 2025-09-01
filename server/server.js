@@ -1,8 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const supabase = require('./config/supabase');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -22,17 +22,21 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/rentease', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Test Supabase connection
+async function testConnection() {
+  try {
+    const { data, error } = await supabase.from('users').select('count').limit(1);
+    if (error && error.code !== 'PGRST116') { // PGRST116 is "relation does not exist" which is expected initially
+      console.error('Supabase connection error:', error);
+    } else {
+      console.log('Connected to Supabase');
+    }
+  } catch (err) {
+    console.error('Supabase connection test failed:', err.message);
+  }
+}
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+testConnection();
 
 // Routes
 app.use('/api/auth', authRoutes);
